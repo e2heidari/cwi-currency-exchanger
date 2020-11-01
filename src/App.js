@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import "./App.css";
 import axios from "axios";
-import Test from "./Test"
+import Test from "./Test";
 
 const Container = styled.div`
   background-color: gold;
@@ -17,6 +17,7 @@ function App() {
   const [fromCurrency, setFromCurrency] = useState("usd"); //hook
   const [coefficient, setCoefficient] = useState({
     usd: 1,
+    nzd: 1.7,
     cad: 1.3,
     eur: 0.7,
   });
@@ -47,6 +48,7 @@ function App() {
     axios.get("https://api.exchangeratesapi.io/latest").then((result) => {
       console.log("App -> result", result);
       setCoefficient({
+        nzd: result.data.rates.NZD,
         usd: result.data.rates.USD,
         cad: result.data.rates.CAD,
         eur: 1,
@@ -76,6 +78,7 @@ function App() {
               label="From"
             >
               <MenuItem value="usd">USD</MenuItem>
+              <MenuItem value="nzd">NZD</MenuItem>
               <MenuItem value="cad">CAD</MenuItem>
               <MenuItem value="eur">EUR</MenuItem>
             </Select>
@@ -90,6 +93,7 @@ function App() {
               label="To"
             >
               <MenuItem value="usd">USD</MenuItem>
+              <MenuItem value="nzd">NZD</MenuItem>
               <MenuItem value="cad">CAD</MenuItem>
               <MenuItem value="eur">EUR</MenuItem>
             </Select>
