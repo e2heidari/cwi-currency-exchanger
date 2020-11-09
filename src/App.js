@@ -14,16 +14,12 @@ const Container = styled.div`
 `;
 
 function App() {
-  const [fromCurrency, setFromCurrency] = useState("usd"); //hook
-  const [coefficient, setCoefficient] = useState({
-    usd: 1,
-    nzd: 1.7,
-    cad: 1.3,
-    eur: 0.7,
-  });
+  const [items, setItems] = useState([]);
+  const [fromCurrency, setFromCurrency] = useState("USD"); //hook
+  const [coefficient, setCoefficient] = useState();
 
-  const handleFromCurrencyChange = (event) => {
-    const from = event.target.value;
+  const handleFromCurrencyChange = () => {
+    const from = items.data.rates.value;
     setFromCurrency(from);
 
     setToAmount((fromAmount * coefficient[toCurrency]) / coefficient[from]);
@@ -45,15 +41,17 @@ function App() {
   };
 
   useEffect(() => {
-    axios.get("https://api.exchangeratesapi.io/latest").then((result) => {
-      console.log("App -> result", result);
-      setCoefficient({
-        nzd: result.data.rates.NZD,
-        usd: result.data.rates.USD,
-        cad: result.data.rates.CAD,
-        eur: 1,
+    axios
+      .get(`https://api.exchangeratesapi.io/latest?base=${fromCurrency}`)
+      .then((result) => {
+        console.log("App -> result", result);
+        console.log(Object.keys(result.data.rates));
+        setItems(Object.keys(result.data.rates));
+        console.log(result.data.rates.CAD);
+        console.log(result.data.rates["CAD"]);
+        // setItems(result.map((response) => response.data.rates));
+        // setCoefficient();
       });
-    });
   }, []);
 
   // const getCurrencyColor = () => {
@@ -77,10 +75,11 @@ function App() {
               onChange={handleFromCurrencyChange}
               label="From"
             >
-              <MenuItem value="usd">USD</MenuItem>
-              <MenuItem value="nzd">NZD</MenuItem>
-              <MenuItem value="cad">CAD</MenuItem>
-              <MenuItem value="eur">EUR</MenuItem>
+              {items.map((apiData) => (
+                <MenuItem key={apiData.keys} value={apiData}>
+                  {apiData}
+                </MenuItem>
+              ))}
             </Select>
           </Container>
           <Container>
@@ -92,10 +91,11 @@ function App() {
               onChange={handleToCurrencyChange}
               label="To"
             >
-              <MenuItem value="usd">USD</MenuItem>
-              <MenuItem value="nzd">NZD</MenuItem>
-              <MenuItem value="cad">CAD</MenuItem>
-              <MenuItem value="eur">EUR</MenuItem>
+              {items.map((apiData) => (
+                <MenuItem key={apiData.keys} value={apiData}>
+                  {apiData}
+                </MenuItem>
+              ))}
             </Select>
           </Container>
           <Container>
