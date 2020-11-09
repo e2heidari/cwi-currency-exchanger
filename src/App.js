@@ -18,20 +18,24 @@ function App() {
   const [fromCurrency, setFromCurrency] = useState("USD"); //hook
   const [coefficient, setCoefficient] = useState();
 
-  const handleFromCurrencyChange = () => {
-    const from = items.data.rates.value;
+  const handleFromCurrencyChange = (event) => {
+    const from = event.target.value;
     setFromCurrency(from);
 
-    setToAmount((fromAmount * coefficient[toCurrency]) / coefficient[from]);
+    setToAmount(
+      (fromAmount * coefficient[toCurrency]) / coefficient[fromCurrency]
+    );
   };
-  const [toCurrency, setToCurrency] = useState("cad");
+  const [toCurrency, setToCurrency] = useState("CAD");
   const handleToCurrencyChange = (event) => {
     const to = event.target.value;
     setToCurrency(to);
-    setToAmount((fromAmount * coefficient[to]) / coefficient[fromCurrency]);
+    setToAmount(
+      (fromAmount * coefficient[toCurrency]) / coefficient[fromCurrency]
+    );
   };
 
-  const [fromAmount, setFromAmount] = useState(0);
+  const [fromAmount, setFromAmount] = useState();
   const [toAmount, setToAmount] = useState(0);
 
   const handleFromAmountChange = (event) => {
@@ -42,17 +46,18 @@ function App() {
 
   useEffect(() => {
     axios
-      .get(`https://api.exchangeratesapi.io/latest?base=${fromCurrency}`)
+      .get("https://api.exchangeratesapi.io/latest?base=USD")
       .then((result) => {
         console.log("App -> result", result);
         console.log(Object.keys(result.data.rates));
         setItems(Object.keys(result.data.rates));
         console.log(result.data.rates.CAD);
         console.log(result.data.rates["CAD"]);
+        setCoefficient(result.data.rates);
         // setItems(result.map((response) => response.data.rates));
         // setCoefficient();
       });
-  }, []);
+  }, [fromCurrency, toCurrency]);
 
   // const getCurrencyColor = () => {
   //   if (fromCurrency === "usd") return "green";
