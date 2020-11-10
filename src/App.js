@@ -8,7 +8,7 @@ import axios from "axios";
 import Test from "./Test";
 
 const Container = styled.div`
-  background-color: gold;
+  background-color: darkseagreen;
   margin: 20px;
   width: 200px;
 `;
@@ -46,7 +46,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("https://api.exchangeratesapi.io/latest?base=USD")
+      .get(`https://api.exchangeratesapi.io/latest?base=${fromCurrency}`)
       .then((result) => {
         console.log("App -> result", result);
         console.log(Object.keys(result.data.rates));
