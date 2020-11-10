@@ -8,7 +8,11 @@ import axios from "axios";
 import Test from "./Test";
 
 const Container = styled.div`
+<<<<<<< HEAD
   background-color: darkseagreen;
+=======
+  background-color: grey;
+>>>>>>> 70792ba1ac8b5d06f40f47500f5a2da195966221
   margin: 20px;
   width: 200px;
 `;
