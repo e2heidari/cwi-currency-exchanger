@@ -1,135 +1,51 @@
-import { MenuItem, Select } from "@material-ui/core";
-import TextField from "@material-ui/core/TextField";
-import InputLabel from "@material-ui/core/InputLabel";
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import "./App.css";
-import axios from "axios";
-import Test from "./Test";
+import React from "react";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import "./components/Main";
+import Main from "./components/Main";
+import Test from "./components/Test";
 
-const Container = styled.div`
-<<<<<<< HEAD
-  background-color: darkseagreen;
-=======
-  background-color: grey;
->>>>>>> 70792ba1ac8b5d06f40f47500f5a2da195966221
-  margin: 20px;
-  width: 200px;
-`;
-
-function App() {
-  const [items, setItems] = useState([]);
-  const [fromCurrency, setFromCurrency] = useState("USD"); //hook
-  const [coefficient, setCoefficient] = useState();
-
-  const handleFromCurrencyChange = (event) => {
-    const from = event.target.value;
-    setFromCurrency(from);
-
-    setToAmount(
-      (fromAmount * coefficient[toCurrency]) / coefficient[fromCurrency]
-    );
-  };
-  const [toCurrency, setToCurrency] = useState("CAD");
-  const handleToCurrencyChange = (event) => {
-    const to = event.target.value;
-    setToCurrency(to);
-    setToAmount(
-      (fromAmount * coefficient[toCurrency]) / coefficient[fromCurrency]
-    );
-  };
-
-  const [fromAmount, setFromAmount] = useState();
-  const [toAmount, setToAmount] = useState(0);
-
-  const handleFromAmountChange = (event) => {
-    const from = Number(event.target.value);
-    setFromAmount(from);
-    setToAmount((from * coefficient[toCurrency]) / coefficient[fromCurrency]);
-  };
-
-  useEffect(() => {
-    axios
-      .get(`https://api.exchangeratesapi.io/latest?base=${fromCurrency}`)
-      .then((result) => {
-        console.log("App -> result", result);
-        console.log(Object.keys(result.data.rates));
-        setItems(Object.keys(result.data.rates));
-        console.log(result.data.rates.CAD);
-        console.log(result.data.rates["CAD"]);
-        setCoefficient(result.data.rates);
-        // setItems(result.map((response) => response.data.rates));
-        // setCoefficient();
-      });
-  }, [fromCurrency, toCurrency]);
-
-  // const getCurrencyColor = () => {
-  //   if (fromCurrency === "usd") return "green";
-  //   if (fromCurrency === "cad") return "gold";
-  //   if (fromCurrency === "eur") return "white";
-  //   return "blue;";
-  // };
-
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <Test />
-        <form autoComplete="off">
-          <Container>
-            <InputLabel id="from-currency-label">From</InputLabel>
-            <Select
-              labelId="from-currency-label"
-              id="from-currency"
-              value={fromCurrency}
-              onChange={handleFromCurrencyChange}
-              label="From"
-            >
-              {items.map((apiData) => (
-                <MenuItem key={apiData.keys} value={apiData}>
-                  {apiData}
-                </MenuItem>
-              ))}
-            </Select>
-          </Container>
-          <Container>
-            <InputLabel id="to-currency-label">To</InputLabel>
-            <Select
-              labelId="to-currency-label"
-              id="to-currency"
-              value={toCurrency}
-              onChange={handleToCurrencyChange}
-              label="To"
-            >
-              {items.map((apiData) => (
-                <MenuItem key={apiData.keys} value={apiData}>
-                  {apiData}
-                </MenuItem>
-              ))}
-            </Select>
-          </Container>
-          <Container>
-            <TextField
-              id="from-amount"
-              label="Amount"
-              variant="outlined"
-              value={fromAmount}
-              type="number"
-              onChange={handleFromAmountChange}
-            />
-          </Container>
-          <Container>
-            <TextField
-              id="to-amount"
-              label="Converted"
-              variant="outlined"
-              disabled
-              value={toAmount}
-            />
-          </Container>
-        </form>
-      </header>
-    </div>
+    <Router>
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/" component={Main}>
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/about">About</Link>
+            </li>
+            <li>
+              <Link to="/users" component={Test}>
+                Users
+              </Link>
+            </li>
+          </ul>
+        </nav>
+
+        {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+        <Switch>
+          {/* <Route path="/about">
+            <About />
+          </Route> */}
+          <Route path="/users">
+            <Users />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
-
-export default App;
+function Home() {
+  return <h2>Home</h2>;
+}
+function Users() {
+  return <h2>Users</h2>;
+}
