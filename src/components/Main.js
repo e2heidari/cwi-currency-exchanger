@@ -67,7 +67,7 @@ const Main = () => {
 
   return (
     <div className="App">
-      <h2>Home</h2>;
+      <h2>Home</h2>
       <header className="App-header">
         <form autoComplete="off">
           <Container>

@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import "./components/Main";
 import Main from "./components/Main";
 import Test from "./components/Test";
 
@@ -11,21 +10,14 @@ export default function App() {
         <nav>
           <ul>
             <li>
-              <Link to="/" component={Main}>
-                Home
-              </Link>
+              <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
-              <Link to="/users" component={Test}>
-                Users
-              </Link>
+              <Link to="/users">Users</Link>
             </li>
           </ul>
         </nav>
-
+        <hr />
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
@@ -44,8 +36,18 @@ export default function App() {
   );
 }
 function Home() {
-  return <h2>Home</h2>;
+  return (
+    <div>
+      <h2>Home</h2>
+      <Main />
+    </div>
+  );
 }
 function Users() {
-  return <h2>Users</h2>;
+  return (
+    <div>
+      <h2>Users</h2>
+      <Test />
+    </div>
+  );
 }
