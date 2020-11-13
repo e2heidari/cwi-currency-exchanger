@@ -44,19 +44,18 @@ const Main = () => {
   };
 
   useEffect(() => {
-    axios
-      .get(`https://api.exchangeratesapi.io/latest?base=${fromCurrency}`)
-      .then((result) => {
-        console.log("App -> result", result);
-        console.log(Object.keys(result.data.rates));
-        setItems(Object.keys(result.data.rates));
-        console.log(result.data.rates.CAD);
-        console.log(result.data.rates["CAD"]);
-        setCoefficient(result.data.rates);
-        // setItems(result.map((response) => response.data.rates));
-        // setCoefficient();
-      });
-  }, [fromCurrency, toCurrency]);
+    const resource = `https://api.exchangeratesapi.io/latest?base=${fromCurrency}`;
+    axios({ url: resource }).then((result) => {
+      console.log("App -> result", result);
+      console.log(Object.keys(result.data.rates));
+      setItems(Object.keys(result.data.rates));
+      console.log(result.data.rates.CAD);
+      console.log(result.data.rates["CAD"]);
+      setCoefficient(result.data.rates);
+      // setItems(result.map((response) => response.data.rates));
+      // setCoefficient();
+    });
+  }, [fromCurrency]);
 
   // const getCurrencyColor = () => {
   //   if (fromCurrency === "usd") return "green";
@@ -78,6 +77,7 @@ const Main = () => {
               value={fromCurrency}
               onChange={handleFromCurrencyChange}
               label="From"
+              key={items.keys}
             >
               {items.map((apiData) => (
                 <MenuItem key={apiData.keys} value={apiData}>
@@ -94,6 +94,7 @@ const Main = () => {
               value={toCurrency}
               onChange={handleToCurrencyChange}
               label="To"
+              key={items.keys}
             >
               {items.map((apiData) => (
                 <MenuItem key={apiData.keys} value={apiData}>
